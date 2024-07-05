@@ -1,0 +1,22 @@
+{
+  "name": "interfaz_general",
+  "version": "1.0.0",
+  "main": "ingresar.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch ./server/ingresar.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "4.19.2",
+    "msnodesqlv8": "4.2.1",
+    "mssql": "^11.0.1",
+    "node.js": "^0.0.1-security",
+    "pg-promise": "11.8.0",
+    "tedious": "18.2.3"
+  }
+}
