@@ -1,32 +1,63 @@
-import sql from 'mssql'
-
+import express from 'express';
+import mssql from 'mssql';
+import path from 'path'
+import trabajadorRoutes from './Interfaz_trabajador/empleado.js'
+const app = express();
 const config = {
-    user: 'Empleado',
+    user: 'Empleado', 
     password: 'EPISI@Ilo2024',
-    server: 'DESKTOP-9R94EAG', 
+    server: 'localhost', 
+    port: 1433, 
     database: 'Proyecto',
     options: {
-        trustedConnection: true,
-        enableArithAbort: true,
-        trustedServerCertificate: true
+        encrypt: true,
+        trustServerCertificate: true,
     },
-    driver: 'msnodesqlv8',
 };
 
-async function conectarYConsultar() {
+app.get('/verificarConexion', async function (req, res) {
     try {
-        await sql.connect(config);
-
-        // Ejecutar una consulta
-        const result = await sql.query`SELECT * FROM Trabajador`;
-
-        console.log(result.recordset);
-
+        await mssql.connect(config);
+        console.log('Conexión exitosa a SQL Server');
+        res.send('Conexión exitosa a SQL Server');
     } catch (err) {
-        console.error('Error al conectar o consultar:', err);
+        console.error('Error al conectar a SQL Server:', err);
+        res.status(500).send('Error al conectar a SQL Server');
     } finally {
-        sql.close();
+        await mssql.close();
     }
-}
+});
 
-conectarYConsultar();
+app.get('/trabajador', async function (req, res) {
+    const correo=req.query.correo;
+    if(!correo){
+        return res.status(400).send('Se requiere correo');
+    }
+    else{    
+         try {
+             await mssql.connect(config);
+             const request = new mssql.Request();
+             request.input('correo',mssql.VarChar,correo)
+             const result = await request.query('SELECT * FROM Trabajador Where Correo_Electronico=@correo');
+             if(result.recordset.length>0){
+                res.redirect('/Interfaz_trabajador/Empleado.html')
+             }
+             else{
+                res.status(404).send('No se encontraron registros')
+             }
+         } catch (err) {
+             console.error('Error al ejecutar consulta:', err);
+             res.status(500).send('Error al ejecutar consulta');
+         } finally {
+             await mssql.close();
+         }
+}});
+app.get('/', (req, res) => {
+    res.sendFile(path.join(process.cwd(), 'server', 'index.html'));
+});
+
+app.use('/Interfaz_trabajador', trabajadorRoutes);
+
+app.listen(5000, function () {
+    console.log('Servidor escuchando en el puerto 5000...');
+});
