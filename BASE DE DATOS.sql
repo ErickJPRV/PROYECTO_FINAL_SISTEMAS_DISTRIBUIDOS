@@ -5,17 +5,21 @@ drop database Proyecto
 use Proyecto
 
 create table Mensajes(
+id_mensaje int not null primary key identity(1,1),
 mensaje text,
-id_trabajador_1 int not null,
-id_trabajador_2 int not null,
+usuario1 int not null,
+usuario2 int not null,
 fecha_mensaje date not null,
 )
+drop table mensajes
 
 alter table Mensajes add constraint FK_Mensaje_trabajador1
-foreign key (id_trabajador_1) references Trabajador(id_Trabajador)
+foreign key (usuario1) references Trabajador(id_Trabajador)
 
 alter table Mensajes add constraint FK_Mensaje_trabajador2
-foreign key (id_trabajador_1) references Trabajador(id_Trabajador)
+foreign key (usuario2) references Trabajador(id_Trabajador)
+
+select * from Mensajes
 
 Insert into Trabajador(id_trabajador,Nombres,Apellidos,Cargo,Contraseña) values(75530659,'Erick Jean Pier','Ramos Vera','Empleado','123$')
 
@@ -49,3 +53,15 @@ Create login Empleado with password='EPISI@Ilo2024'
 create user Trabajador from LOGIN Empleado
 Alter role db_datareader add member Trabajador
 Alter Role db_datawriter add member Trabajador
+
+use Proyecto;
+alter table Trabajador add ImageUrl NVARCHAR(MAX);
+select * from Trabajador
+Insert into Trabajador(id_Trabajador,Nombres,Apellidos,Cargo,Contraseña,Correo_Electronico,ImageUrl)
+values (78536824,'Honorio','Apaza','Administrador','159','Honorio@unam.edu.pe',null)
+
+Create login Administrador with password='Admin2024@unam'
+create user Administrador from LOGIN Administrador
+
+Alter role db_datawriter add member Administrador
+Alter role db_datareader add member Administrador

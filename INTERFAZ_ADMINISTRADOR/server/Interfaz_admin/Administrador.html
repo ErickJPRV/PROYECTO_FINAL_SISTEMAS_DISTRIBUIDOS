@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio</title>
+    <style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  min-height: 100vh;
+  background: #eef5fe;
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.overlay {
+  display: none;
+  position: fixed;
+  margin-top:80px;
+  top: 0;
+  right: 0;
+  width: 79%;
+  height: 80%;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  text-align: center;
+  padding: 5px;
+  padding-top: 50px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none; 
+  transition: opacity 0.3s ease, right 0.3s ease; 
+  overflow-y: auto;
+  border-radius: 30px;
+  margin-right: 5px;
+}
+
+.overlay.active {
+  display: block;
+  opacity: 1; 
+  right: 0; 
+  pointer-events: auto;
+}
+
+.overlay p {
+  margin: 10px;
+}
+
+.overlay button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  right: 0;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.overlay button:hover {
+  background-color: #0056b3;
+}
+.flex {
+  display: flex;
+  align-items: center;
+}
+.nav_image {
+  display: flex;
+  min-width: 55px;
+  justify-content: center;
+}
+.nav_image img {
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 270px;
+  background: #fff;
+  padding: 15px 10px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+}
+.sidebar.close {
+  width: calc(55px + 20px);
+}
+.logo_items {
+  gap: 8px;
+}
+.logo_name {
+  font-size: 22px;
+  color: #333;
+  font-weight: 500px;
+  transition: all 0.3s ease;
+}
+.sidebar.close .logo_name,
+.sidebar.close #lock-icon,
+.sidebar.close #sidebar-close {
+  opacity: 0;
+  pointer-events: none;
+}
+#lock-icon,
+#sidebar-close {
+  padding: 10px;
+  color: #4070f4;
+  font-size: 25px;
+  cursor: pointer;
+  margin-left: -4px;
+  transition: all 0.3s ease;
+}
+#sidebar-close {
+  display: none;
+  color: #333;
+}
+.menu_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 40px;
+  overflow-y: auto;
+  height: calc(100% - 82px);
+}
+.menu_container::-webkit-scrollbar {
+  display: none;
+}
+.menu_title {
+  position: relative;
+  height: 50px;
+  width: 55px;
+}
+.menu_title .title {
+  margin-left: 15px;
+  transition: all 0.3s ease;
+}
+.sidebar.close .title {
+  opacity: 0;
+}
+.menu_title .line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 3px;
+  width: 20px;
+  border-radius: 25px;
+  background: #aaa;
+  transition: all 0.3s ease;
+}
+.menu_title .line {
+  opacity: 0;
+}
+.sidebar.close .line {
+  opacity: 1;
+}
+.item {
+  list-style: none;
+}
+.link {
+  text-decoration: none;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  color: #707070;
+}
+.link:hover {
+  color: #fff;
+  background-color: #4070f4;
+}
+.link span {
+  white-space: nowrap;
+}
+.link i {
+  height: 50px;
+  min-width: 55px;
+  display: flex;
+  font-size: 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.sidebar_profile {
+  padding-top: 15px;
+  margin-top: 15px;
+  gap: 15px;
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+.sidebar_profile .name {
+  font-size: 18px;
+  color: #333;
+}
+.sidebar_profile .email {
+  font-size: 15px;
+  color: #333;
+}
+
+/* Navbar */
+.navbar {
+  max-width: 500px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 60%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 10px 20px;
+  border-radius: 0 0 8px 8px;
+  justify-content: space-between;
+}
+#sidebar-open {
+  font-size: 30px;
+  color: #333;
+  cursor: pointer;
+  margin-right: 20px;
+  display: none;
+}
+.search_box {
+  height: 46px;
+  max-width: 500px;
+  width: 100%;
+  border: 1px solid #aaa;
+  outline: none;
+  border-radius: 8px;
+  padding: 0 15px;
+  font-size: 18px;
+  color: #333;
+}
+.navbar img {
+  height: 40px;
+  width: 40px;
+  margin-left: 20px;
+}
+
+@media screen and (max-width: 1100px) {
+  .navbar {
+    left: 65%;
+  }
+}
+@media screen and (max-width: 800px) {
+  .sidebar {
+    left: 0;
+    z-index: 1000;
+  }
+  .sidebar.close {
+    left: -100%;
+  }
+  #sidebar-close {
+    display: block;
+  }
+  #lock-icon {
+    display: none;
+  }
+  .navbar {
+    left: 0;
+    max-width: 100%;
+    transform: translateX(0%);
+  }
+  #sidebar-open {
+    display: block;
+  }
+}
+    </style>
+    <link flex href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <nav class="sidebar locked">
+      <div class="logo_items flex">
+        <span class="nav_image">
+          <img src="images/logo.png" alt="logo_img" />
+        </span>
+        <span class="logo_name">Bienvenido Administrador</span>
+        <i class="bx bx-lock-alt" id="lock-icon" title="Unlock Sidebar"></i>
+        <i class="bx bx-x" id="sidebar-close"></i>
+      </div>
+
+      <div class="menu_container">
+        <div class="menu_items">
+            <ul class="menu_item">
+                <div class="menu_title flex">
+                    <span class="title">Eventos</span>
+                    <span class="line"></span>
+                </div>
+                <li class="item">
+                    <a href="#" class="link flex" onclick="mostrarOverlay('crearEvento')">
+                        <i class="bx bx-home-alt"></i>
+                        <span>Crear Evento</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#" class="link flex" onclick="mostrarOverlay('todosEventos')">
+                        <i class="bx bx-grid-alt"></i>
+                        <span>Todos los eventos</span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="menu_item">
+                <div class="menu_title flex">
+                    <span class="title">Editor</span>
+                    <span class="line"></span>
+                </div>
+                <li class="item">
+                    <a href="#" class="link flex" onclick="mostrarOverlay('crearUsuario')">
+                        <i class="bx bxs-magic-wand"></i>
+                        <span>Crear nuevo usuario</span>
+
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#" class="link flex" onclick="mostrarOverlay('todosUsuarios')">
+                        <i class="bx bx-folder"></i>
+                        <span>Todos los usuarios</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#" class="link flex" onclick="mostrarOverlay('registroDocumentos')">
+                        <i class="bx bx-cloud-upload"></i>
+                        <span>Registro de documentos</span>
+                    </a>
+                </li>
+            </ul>
+
+
+        <div class="sidebar_profile flex">
+          <span class="nav_image">
+            <img src="images/profile.jpg" alt="logo_img" />
+          </span>
+          <div class="data_text">
+            <span class="name">David Oliva</span>
+            <span class="email">david@gmail.com</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="overlay" id="crearEvento">
+        <p>Creacion de eventos</p>
+        <button onclick="ocultarOverlay()">Cerrar</button>
+    </div>
+
+    <div class="overlay" id="todosEventos">
+        <p>Contenido del div Todos los Eventos</p>
+        <button onclick="ocultarOverlay()">Cerrar</button>
+    </div>
+
+    <div class="overlay" id="crearUsuario">
+      <button onclick="ocultarOverlay()" class="close">&times;</button>
+        <p>Ingresar Usuario</p>
+        <form action="">
+          <label for="Nombres">Nombres:</label>
+          <input type="text" name="Nombres"><br>
+          <label for="Apellidos">Apellidos:</label>
+          <input type="text" name="Apellidos"><br>
+          <label for="Cargo">Cargo:</label>
+          <input type="text" name="Cargo"><br>
+          <label for="Contraseña">Contraseña:</label>
+          <input type="password" name="Contraseña"><br>
+          <label for="Email">Correo:</label>
+          <input type="email" name="Email"><br>
+          <label for="image">Imagen de perfil:</label>
+          <input type="file" name="image" id="fileInput" accept="image/*"><br>
+          <button id="uploadButton">Subir Imagen</button>
+      
+          <div id="imageList"></div>
+
+        </form>
+    </div>
+
+    <div class="overlay" id="todosUsuarios">
+        <p>Contenido del div Todos los Usuarios</p>
+        <button onclick="ocultarOverlay()">Cerrar</button>
+    </div>
+
+    <div class="overlay" id="registroDocumentos">
+        <p>Contenido del div Registro de Documentos</p>
+        <button onclick="ocultarOverlay()">Cerrar</button>
+    </div>
+  </body>
+  <script>
+    function mostrarOverlay(id) {
+      var overlays = document.querySelectorAll('.overlay');
+      overlays.forEach(function(overlay) {
+          overlay.classList.remove('active');
+      });
+
+      var overlay = document.getElementById(id);
+      overlay.classList.add('active');
+  }
+
+    function ocultarOverlay() {
+      var overlays = document.querySelectorAll('.overlay');
+      overlays.forEach(function(overlay) {
+          overlay.classList.remove('active');
+      });
+  }
+  </script>
+</html>

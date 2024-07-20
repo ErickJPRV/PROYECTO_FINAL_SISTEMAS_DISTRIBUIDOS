@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script> 
     <title>Inicio</title>
     <style>
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
@@ -13,9 +18,58 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+.overlay {
+  display: none;
+  position: fixed;
+  margin-top:80px;
+  top: 0;
+  right: 0;
+  width: 79%;
+  height: 80%;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  text-align: center;
+  padding: 5px;
+  padding-top: 50px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none; 
+  transition: opacity 0.3s ease, right 0.3s ease; 
+  overflow-y: auto;
+  border-radius: 30px;
+  margin-right: 5px;
+}
+
+.overlay.active {
+  display: block;
+  opacity: 1; 
+  right: 0; 
+  pointer-events: auto;
+}
+
+.overlay p {
+  margin: 10px;
+}
+
+.overlay button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  right: 0;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.overlay button:hover {
+  background-color: #0056b3;
+}
 body {
   min-height: 100vh;
-  background: #eef5fe;
+  background-image: radial-gradient(circle at -16.45% 74.18%, #0064ec 0, #005fea 10%, #0059e7 20%, #0053e2 30%, #054bdc 40%, #4d42d4 50%, #6c37cb 60%, #822ac0 70%, #9416b5 80%, #a300a8 90%, #af009b 100%);
+}
+.data_text{
+  margin-bottom: 20px;
 }
 .flex {
   display: flex;
@@ -231,100 +285,102 @@ body {
           <img src="images/logo.png" alt="logo_img" />
         </span>
         <span class="logo_name">Bienvenido Trabajador</span>
-        <i class="bx bx-lock-alt" id="lock-icon" title="Unlock Sidebar"></i>
-        <i class="bx bx-x" id="sidebar-close"></i>
       </div>
-
       <div class="menu_container">
         <div class="menu_items">
-          <ul class="menu_item">
-            <div class="menu_title flex">
-              <span class="title">Dashboard</span>
-              <span class="line"></span>
-            </div>
-            <li class="item">
-              <a href="#" class="link flex">
-                <i class="bx bx-home-alt"></i>
-                <span>Overview</span>
-              </a>
-            </li>
-            <li class="item">
-              <a href="#" class="link flex">
-                <i class="bx bx-grid-alt"></i>
-                <span>All Projects</span>
-              </a>
-            </li>
-          </ul>
+            <ul class="menu_item">
+                <div class="menu_title flex">
+                    <span class="title">Eventos</span>
+                    <span class="line"></span>
+                </div>
+                <li class="item">
+                    <a href="#" class="link flex" onclick="mostrarOverlay('crearEvento')">
+                        <i class="bx bx-home-alt"></i>
+                        <span>Calendario</span>
+                    </a>
+                </li>
+            </ul>
 
-          <ul class="menu_item">
-            <div class="menu_title flex">
-              <span class="title">Editor</span>
-              <span class="line"></span>
-            </div>
-            <li class="item">
-              <a href="#" class="link flex">
-                <i class="bx bxs-magic-wand"></i>
-                <span>Magic Build</span>
-              </a>
-            </li>
-            <li class="item">
-              <a href="#" class="link flex">
-                <i class="bx bx-folder"></i>
-                <span>New Projects</span>
-              </a>
-            </li>
-            <li class="item">
-              <a href="#" class="link flex">
-                <i class="bx bx-cloud-upload"></i>
-                <span>Upload New</span>
-              </a>
-            </li>
-          </ul>
+            <ul class="menu_item">
+                <div class="menu_title flex">
+                    <span class="title">Editor</span>
+                    <span class="line"></span>
+                </div>
+                <li class="item">
+                    <a href="#" class="link flex" onclick="mostrarOverlay('crearUsuario')">
+                        <i class="bx bxs-magic-wand"></i>
+                        <span>Chat en vivo
+                        </span>
 
-          <ul class="menu_item">
-            <div class="menu_title flex">
-              <span class="title">Setting</span>
-              <span class="line"></span>
-            </div>
-            <li class="item">
-              <a href="#" class="link flex">
-                <i class="bx bx-flag"></i>
-                <span>Notice Board</span>
-              </a>
-            </li>
-            <li class="item">
-              <a href="#" class="link flex">
-                <i class="bx bx-award"></i>
-                <span>Award</span>
-              </a>
-            </li>
-            <li class="item">
-              <a href="#" class="link flex">
-                <i class="bx bx-cog"></i>
-                <span>Setting</span>
-              </a>
-            </li>
-          </ul>
-        </div>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#" class="link flex" onclick="mostrarOverlay('registroDocumentos')">
+                        <i class="bx bx-cloud-upload"></i>
+                        <span>Envio de documentos</span>
+                    </a>
+                </li>
+            </ul>
 
         <div class="sidebar_profile flex">
-          <span class="nav_image">
-            <img src="images/profile.jpg" alt="logo_img" />
-          </span>
           <div class="data_text">
-            <span class="name">David Oliva</span>
-            <span class="email">david@gmail.com</span>
+            <span class="name" id="nombreCompleto"></span>
+            <span class="email" id="correoElectronico"></span>
           </div>
         </div>
       </div>
     </nav>
+    <div class="overlay" id="crearEvento">
+      <p>Creacion de eventos</p>
+      <div id="calendar"></div>
+      <button onclick="ocultarOverlay()">Cerrar</button>
+  </div>
 
-    <!-- Navbar -->
-    <nav class="navbar flex">
-      <i class="bx bx-menu" id="sidebar-open"></i>
-      <input type="text" placeholder="Search..." class="search_box" />
-      <span class="nav_image">
-        <img src="images/profile.jpg" alt="logo_img" />
-      </span>
-    </nav>
-  </body
+  <div class="overlay" id="todosEventos">
+      <p>Contenido del div Todos los Eventos</p>
+      <button onclick="ocultarOverlay()">Cerrar</button>
+  </div>
+
+  <div class="overlay" id="todosUsuarios">
+      <p>Contenido del div Todos los Usuarios</p>
+      <button onclick="ocultarOverlay()">Cerrar</button>
+  </div>
+
+  <div class="overlay" id="registroDocumentos">
+      <p>Contenido del div Registro de Documentos</p>
+      <button onclick="ocultarOverlay()">Cerrar</button>
+  </div>
+
+  </body>
+  <script>
+    fetch('/Interfaz_trabajador/obtenerDatosTrabajador')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Datos del trabajador:', data);
+        document.querySelector('.name').textContent = `${data.Nombres} ${data.Apellidos}`;
+        document.querySelector('.email').textContent = data.Correo_Electronico;
+      })
+      .catch(error => console.error('Error al obtener datos del trabajador:', error));
+      function mostrarOverlay(id) {
+        var overlays = document.querySelectorAll('.overlay');
+        overlays.forEach(function(overlay) {
+            overlay.classList.remove('active');
+        });
+  
+        var overlay = document.getElementById(id);
+        overlay.classList.add('active');
+    }
+  
+      function ocultarOverlay() {
+        var overlays = document.querySelectorAll('.overlay');
+        overlays.forEach(function(overlay) {
+            overlay.classList.remove('active');
+        });
+    }
+  </script>
+  <script>
+    $(document).ready(function() {
+    $('#calendar').fullCalendar();
+    });
+ </script>
+</html>
