@@ -1,4 +1,5 @@
 import mssql from 'mssql';
+import conectarALaBaseDeDatos from '../db/connectsqlserver.js';
 
 const config = {
   user: 'Empleado',
@@ -12,22 +13,23 @@ const config = {
   },
 };
 
+const poolPromise = mssql.connect(config).then(pool => {
+  console.log('Connected to SQL Server');
+  return pool;
+}).catch(err => {
+  console.error('Database connection failed:', err);
+  process.exit(1);
+});
+
 export const findUserById = async (userId) => {
   try {
-    // Conectar a SQL Server
-    await mssql.connect(config);
-    const request = new mssql.Request();
-
-    // Pasar el parámetro a la consulta
+    const pool = await poolPromise;
+    const request = pool.request();
     request.input('userId', mssql.Int, userId);
-
-    // Ejecutar la consulta
-    const result = await request.query(
-      "SELECT Nombres,Apellidos,Cargo  FROM Trabajador WHERE UserId = @userId"
-    );
+    const result = await request.query("SELECT id_Trabajador,Nombres, Apellidos, Cargo,ImageUrl FROM Trabajador WHERE id_Trabajador = @userId");
 
     if (result.recordset.length > 0) {
-      return result.recordset[0]; // Devolver el primer (y único) registro encontrado
+      return result.recordset[0];
     } else {
       console.log('Usuario no encontrado');
       return null;
@@ -35,25 +37,27 @@ export const findUserById = async (userId) => {
   } catch (err) {
     console.error('Error al encontrar el usuario:', err);
     return null;
-  } finally {
-    // Cerrar la conexión a SQL Server
-    mssql.close();
   }
 };
-export const getUsersForSidebar = async (loggedInUserId) => {
-  try {
-      const pool = await mssql.connect(config);
-      const result = await pool.request()
-          .input('loggedInUserId', mssql.Int, loggedInUserId)
-          .query(`
-              SELECT user_id AS id, full_name AS fullName, username, gender, profile_pic AS profilePic
-              FROM Users
-              WHERE user_id <> @loggedInUserId
-          `);
 
-      return result.recordset;
+export const getUsersForSidebarcontroller = async (loggedInUserId) => {
+  try {
+    await conectarALaBaseDeDatos(); // Conectar directamente en cada función
+    const request = new mssql.Request();
+    request.input('loggedInUserId', mssql.Int, loggedInUserId);
+    const result = await request.query(`
+      SELECT 
+        id_Trabajador AS id, 
+        Nombres AS fullName, 
+        Apellidos AS lastName, 
+        Cargo AS position, 
+        ImageUrl AS profilePic
+      FROM Trabajador
+      WHERE id_Trabajador != @loggedInUserId
+    `);
+    return result.recordset;
   } catch (error) {
-      console.error('Error getting users for sidebar:', error);
-      throw error;
+    console.error('Error getting users for sidebar:', error);
+    throw error;
   }
 };

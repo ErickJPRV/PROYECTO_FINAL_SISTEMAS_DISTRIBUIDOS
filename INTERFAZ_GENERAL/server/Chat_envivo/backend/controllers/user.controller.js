@@ -1,10 +1,9 @@
-import { getUsersForSidebar } from '../models/user.model.js';
+import { getUsersForSidebarcontroller } from '../models/user.model.js';
 
-export const getUsersForSidebarController = async (req, res) => {
+export const getUsersForSidebar = async (req, res) => {
     try {
-        const loggedInUserId = req.user._id;
-
-        const filteredUsers = await getUsersForSidebar(loggedInUserId);
+        const loggedInUserId = req.user.id_Trabajador;
+        const filteredUsers = await getUsersForSidebarcontroller(loggedInUserId);
 
         res.status(200).json(filteredUsers);
     } catch (error) {

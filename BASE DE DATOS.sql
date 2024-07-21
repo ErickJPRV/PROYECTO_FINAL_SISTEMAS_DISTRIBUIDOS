@@ -64,4 +64,25 @@ Create login Administrador with password='Admin2024@unam'
 create user Administrador from LOGIN Administrador
 
 Alter role db_datawriter add member Administrador
-Alter role db_datareader add member Administrador
+Alter role db_datareader add member Administrador-- Asegúrate de que las columnas necesarias existan y si no, añádelas
+select * from Messages
+drop table Messages
+CREATE TABLE Messages (
+    message_id INT IDENTITY(1,1) PRIMARY KEY,
+    conversation_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    message NVARCHAR(MAX) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT GETDATE(),
+    updated_at DATETIME NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (conversation_id) REFERENCES Conversations(conversation_id),
+    FOREIGN KEY (sender_id) REFERENCES Trabajador(id_Trabajador),  -- Asegúrate de que esta referencia sea correcta
+    FOREIGN KEY (receiver_id) REFERENCES Trabajador(id_Trabajador)  -- Asegúrate de que esta referencia sea correcta
+)
+
+SELECT p1.conversation_id
+                FROM Participants p1
+                JOIN Participants p2 ON p1.conversation_id = p2.conversation_id
+                WHERE p1.user_id = 75530659  AND p2.user_id = 71234595
+                GROUP BY p1.conversation_id
+                HAVING COUNT(DISTINCT p1.user_id) = 2

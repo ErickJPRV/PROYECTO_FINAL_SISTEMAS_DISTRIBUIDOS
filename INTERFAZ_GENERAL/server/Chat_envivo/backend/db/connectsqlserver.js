@@ -1,25 +1,20 @@
-import sql from 'mssql';
-
-const dbConfig = {
-  user: 'Empleado',
-  password: 'EPISI@Ilo2024',
-  server: 'localhost',
-  port: 1433,
-  database: 'Proyecto',
-  options: {
-    encrypt: false,
-    enableArithAbort: true,
-  },
-};
-
+import mssql from 'mssql';
 const conectarALaBaseDeDatos = async () => {
   try {
-    const pool = await new sql.ConnectionPool(dbConfig).connect();
-    console.log('Conectado a SQL Server');
-    return pool;
-  } catch (err) {
-    console.error('Error al conectar con SQL Server:', err);
-    throw err;
+      await mssql.connect({
+          user: 'Empleado',
+          password: 'EPISI@Ilo2024',
+          server: 'localhost',
+          port: 1433,
+          database: 'Proyecto',
+          options: {
+              encrypt: false,
+              enableArithAbort: true,
+          },
+      });
+  } catch (error) {
+      console.error("Error al conectar a la base de datos:", error.message);
+      throw new Error("Error al conectar a la base de datos");
   }
 };
 export default conectarALaBaseDeDatos;
